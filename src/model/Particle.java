@@ -12,6 +12,7 @@ public class Particle {
 	private double velocity;
 	private double angle;
 	private List<Particle> neighbors;
+	private boolean mark;
 	
 	public Particle(int id, double x, double y, double radius, double color, double velocity, double angle) {
 		if (radius < 0 || color < 0 || color > 1 || id <= 0) throw new IllegalArgumentException("particle wrong mthr fckr");
@@ -23,6 +24,18 @@ public class Particle {
 		this.neighbors = new ArrayList<Particle>();
 		this.velocity = velocity;
 		this.angle = angle;
+	}
+	
+	public boolean isMarked() {
+		return mark;
+	}
+	
+	public void clearMark() {
+		this.mark = false;
+	}
+	
+	public void mark() {
+		this.mark = true;
 	}
 
 	public int getId() {
@@ -55,6 +68,18 @@ public class Particle {
 	
 	public List<Particle> getNeighbors() {
 		return neighbors;
+	}
+	
+	public void setX(double x) {
+		this.x = x;
+	}
+	
+	public void setY(double y) {
+		this.y = y;
+	}
+	
+	public void setAngle(double angle) {
+		this.angle = angle;
 	}
 
 	@Override
