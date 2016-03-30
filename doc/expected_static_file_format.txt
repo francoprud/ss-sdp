@@ -1,0 +1,9 @@
+particlesAmount     (integer)
+spaceDimensions     (integer)
+noiceAmplitude      (double)
+interactionRadius   (double)
+particleVelocity    (double)
+particleRadio color (double double)
+particleRadio color (double double)
+particleRadio color (double double)
+...
