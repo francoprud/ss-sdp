@@ -1,13 +1,12 @@
 package simulation;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import util.RandomUtils;
 import model.Particle;
 import model.SimulationData;
 import model.Vector2;
+import util.RandomUtils;
 
 public class SelfDrivenParticleSimulation implements Simulation {
 

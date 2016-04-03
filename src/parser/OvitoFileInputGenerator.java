@@ -1,5 +1,6 @@
 package parser;
 
+import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
@@ -12,65 +13,66 @@ import model.SimulationData;
  */
 public class OvitoFileInputGenerator {
 	private static final String ENCODING = "UTF-8";
-	private static final String RED = "255 0 0";
-	private static final String GREEN = "0 255 0";
 	private static final String BLUE = "0 0 255";
-
-	private Particle selectedParticle;
-	private SimulationData simulationData;
-
-	public OvitoFileInputGenerator(SimulationData simulationData) {
-		this.simulationData = simulationData;
+	
+	private PrintWriter writer;
+	private String filePath;
+	
+	public OvitoFileInputGenerator(String filePath) {
+		this.filePath = filePath;
 	}
 
-	public OvitoFileInputGenerator(SimulationData simulationData,
-			int selectedParticleId) {
-		this.simulationData = simulationData;
-		this.selectedParticle = simulationData
-				.getParticleById(selectedParticleId);
+	public void generateFile(int particlesAmount) throws FileNotFoundException, UnsupportedEncodingException {
+		writer = new PrintWriter(filePath, ENCODING);
+		printHeaders(particlesAmount);
 	}
-
-	public void setSelectedParticle(int particleId) {
-		this.selectedParticle = simulationData.getParticleById(particleId);
-	}
-
-	public void generateFile(String filePath) throws FileNotFoundException,
-			UnsupportedEncodingException {
-		PrintWriter writer = new PrintWriter(filePath, ENCODING);
-		writer.println(simulationData.getParticlesAmount());
-		writer.println("ID X Y R G B r"); // This second line is a comment for
-											// Ovito
-		for (Particle particle : simulationData.getParticles()) {
-			if (particle.equals(selectedParticle)) {
-				writer.println(generateLine(particle, RED));
-			} else if (selectedParticle.getNeighbors().contains(particle)) {
-				writer.println(generateLine(particle, GREEN));
-			} else {
-				writer.println(generateLine(particle, BLUE));
-			}
+	
+	public void printSimulationInstance(SimulationData simulationData, int instance) {
+		writer.println(instance);
+		for (Particle particle: simulationData.getParticles()) {
+			writer.println(generateLine(particle, BLUE));
 		}
+		printBoundariesParticles(simulationData.getSpaceDimension());
+	}
+	
+	public void endSimulation() {
 		writer.close();
 	}
-
+	
+	private void printBoundariesParticles(int spaceDimension) {
+//		TODO: print 4 particles
+	}
+	
+	private void printHeaders(int particlesAmount) {
+		writer.println(particlesAmount + 4);
+		writer.println("ID X Y Xv Yv R G B r");
+	}
+	
 	private String generateLine(Particle particle, String RGB) {
 		StringBuilder line = new StringBuilder();
 		line.append(particle.getId()).append(" ").append(particle.getX())
-				.append(" ").append(particle.getY()).append(" ").append(RGB)
+				.append(" ").append(particle.getY()).append(" ").append(generateParticleColor(particle))
 				.append(" ").append(particle.getRadius());
 		return line.toString();
 	}
-
-	public void generateResult(String filePath) throws FileNotFoundException,
-			UnsupportedEncodingException {
-		PrintWriter writer = new PrintWriter(filePath, "UTF-8");
-		for (Particle particle : simulationData.getParticles()) {
-			writer.print(particle.getId() + "  ");
-			for (Particle p : particle.getNeighbors()) {
-				writer.print(p.getId() + " ");
-			}
-			writer.println("");
-		}
-		writer.close();
+	
+	private String generateParticleColor(Particle particle) {
+		float hue = calculateHue(particle.getAngle());
+		int colorValue = Color.HSBtoRGB(hue, 1.0f, 1.0f);
+		Color color = new Color(colorValue, true);
+		return color.getRed() + " " + color.getGreen() + " " + color.getBlue();
 	}
-
+	
+	private float calculateHue(double angle) {
+		if (angle < 0) {
+			while (angle < 0) {
+				angle += 2 * Math.PI;
+			}
+		} else if (angle > 2 * Math.PI) {
+			while (angle > 2 * Math.PI) {
+				angle -= 2 * Math.PI;
+			}
+		}
+		return (float) (angle / (2 * Math.PI));
+	}
 }

@@ -33,14 +33,12 @@ public class InformationParser {
 		
 		for (int i = 1; i <= particlesAmount; i++) {
 			double radius = staticScanner.nextDouble();
-			double color = staticScanner.nextDouble();
 			double x = dynamicScanner.nextDouble();
 			double y = dynamicScanner.nextDouble();
 			double angle = dynamicScanner.nextDouble();
-			Particle particle = new Particle(i, x, y, radius, color, particleVelocity, angle);
-			builder = builder.withParticle(particle);	
+			Particle particle = new Particle(i, x, y, radius, particleVelocity, angle);
+			builder = builder.withParticle(particle);
 		}
-		
 		return builder;
 	}
 }
