@@ -30,7 +30,7 @@ public class OvitoFileInputGenerator {
 	public void printSimulationInstance(SimulationData simulationData, int instance) {
 		writer.println(instance);
 		for (Particle particle: simulationData.getParticles()) {
-			writer.println(generateLine(particle, BLUE));
+			writer.println(generateLine(particle));
 		}
 		printBoundariesParticles(simulationData.getSpaceDimension());
 	}
@@ -40,7 +40,14 @@ public class OvitoFileInputGenerator {
 	}
 	
 	private void printBoundariesParticles(int spaceDimension) {
-//		TODO: print 4 particles
+		printBoundaryParticle(0, 0);
+		printBoundaryParticle(0, spaceDimension);
+		printBoundaryParticle(spaceDimension, 0);
+		printBoundaryParticle(spaceDimension, spaceDimension);
+	}
+	
+	private void printBoundaryParticle(int x, int y) {
+		writer.println("id" + x + " " + y + " 0 0 " + BLUE + " 0");
 	}
 	
 	private void printHeaders(int particlesAmount) {
@@ -48,7 +55,7 @@ public class OvitoFileInputGenerator {
 		writer.println("ID X Y Xv Yv R G B r");
 	}
 	
-	private String generateLine(Particle particle, String RGB) {
+	private String generateLine(Particle particle) {
 		StringBuilder line = new StringBuilder();
 		line.append(particle.getId()).append(" ").append(particle.getX())
 				.append(" ").append(particle.getY()).append(" ").append(generateParticleColor(particle))

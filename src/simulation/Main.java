@@ -35,6 +35,8 @@ public class Main {
 					ovito.printSimulationInstance(simulationData, instance);
 			}
 		}).simulate(simulationData);
+		
+		ovito.endSimulation();
 	}
 
 	private static Boolean isAValidMValue(SimulationData simulationData) {
