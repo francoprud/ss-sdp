@@ -28,7 +28,7 @@ public class InputGenerator {
 	}
 
 	public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException {
-		generateInput(25000, 500, 1.5, 3.4, 0.03);
+		generateInput(100, 50, 1, 5, 0.03);
 	}
 
 }

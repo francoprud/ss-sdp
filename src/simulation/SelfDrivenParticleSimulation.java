@@ -3,6 +3,8 @@ package simulation;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sun.javafx.scene.paint.GradientUtils.Point;
+
 import model.Particle;
 import model.SimulationData;
 import model.Vector2;
@@ -62,7 +64,13 @@ public class SelfDrivenParticleSimulation implements Simulation {
 		particle.setX((newPosition.getX() + spaceDimension) % spaceDimension);
 		particle.setY((newPosition.getY() + spaceDimension) % spaceDimension);
 	}
-
+	
+	private double calculateDisplacement(double oldPosition, double newPosition) {
+		double L = simulationData.getSpaceDimension();
+		double displacement = newPosition - oldPosition;
+		return displacement < 0.00001 ? displacement + L : displacement;
+	}
+	
 	private double angleFunction(List<Double> angles) {
 		double sinAcum = 0;
 		double cosAcum = 0;

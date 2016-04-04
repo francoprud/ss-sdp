@@ -9,39 +9,40 @@ import parser.InformationParser;
 import parser.OvitoFileInputGenerator;
 
 public class Main {
-	private static final int M = 13;
-	private static final int T = 1;
-	private static final String OVITO_FILE_PATH = "doc/examples/results/results.txt";
+	private static final int M = 25;
+	private static final int T = 10000;
+	private static final String OVITO_FILE_PATH = "doc/examples/result.txt";
 
-	public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException {
-		String dynamicFilePath = "doc/examples/Dynamic500.txt";
-		String staticFilePath = "doc/examples/Static500.txt";
+	public static void main(String[] args) {
+		String dynamicFilePath = "doc/examples/Dynamic100.txt";
+		String staticFilePath = "doc/examples/Static100.txt";
 		final OvitoFileInputGenerator ovito = new OvitoFileInputGenerator(OVITO_FILE_PATH);
 		
-		SimulationData simulationData = InformationParser
-				.generateCellIndexObject(dynamicFilePath, staticFilePath)
-				.build();
-
-		if (!isAValidMValue(simulationData)) {
-			System.out.println("Not a valid M value.");
+		SimulationData simulationData = parseSimulationData(dynamicFilePath, staticFilePath);
+		if (simulationData == null || !isAValidMValue(simulationData) || !generateOvitoFiles(ovito, simulationData)) {
 			return;
 		}
-		
-		ovito.generateFile(simulationData.getParticlesAmount());
-		
+
 		new TP2Simulation(M, T, new TP2Simulation.Listener() {
 			@Override
-			public void onSnapshotAvailable(int instance, SimulationData simulationData) {
-					ovito.printSimulationInstance(simulationData, instance);
+			public void onSnapshotAvailable(int instance,
+					SimulationData simulationData) {
+				ovito.printSimulationInstance(simulationData);
 			}
 		}).simulate(simulationData);
 		
 		ovito.endSimulation();
 	}
 
-	private static Boolean isAValidMValue(SimulationData simulationData) {
-		return simulationData.getSpaceDimension() / M > simulationData
-				.getInteractionRadius() + 2 * getMaximumRadius(simulationData);
+	private static boolean isAValidMValue(SimulationData simulationData) {
+		int L = simulationData.getSpaceDimension();
+		double r = simulationData.getInteractionRadius();
+		if ( L / M > r + 2 * getMaximumRadius(simulationData)) {
+			return true;
+		} else {
+			System.err.println("Not a valid M value.");
+			return false;
+		}
 	}
 
 	private static Double getMaximumRadius(SimulationData simulationData) {
@@ -53,4 +54,24 @@ public class Main {
 		}
 		return max;
 	}
+	
+	private static SimulationData parseSimulationData(String dynamicFilePath, String staticFilePath) {
+		try {
+			return InformationParser.generateCellIndexObject(dynamicFilePath, staticFilePath).build();
+		} catch (FileNotFoundException e) {
+			System.err.println("Can not generate cell index object. Error: " + e.getMessage());
+			return null;
+		}
+	}
+	
+	private static boolean generateOvitoFiles(OvitoFileInputGenerator ovito, SimulationData simulationData) {
+		try {
+			ovito.generateFile(simulationData.getParticlesAmount());
+			return true;
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			System.err.println("Can not generate ovito's files. Error: " + e.getMessage());
+			return false;
+		}
+	}
+	
 }
