@@ -80,3 +80,6 @@ local.properties
 
 # Code Recommenders
 .recommenders/
+
+# Example files
+doc/examples/*

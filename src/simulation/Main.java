@@ -16,7 +16,7 @@ public class Main {
 	public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException {
 		String dynamicFilePath = "doc/examples/Dynamic500.txt";
 		String staticFilePath = "doc/examples/Static500.txt";
-		OvitoFileInputGenerator ovito = new OvitoFileInputGenerator(OVITO_FILE_PATH);
+		final OvitoFileInputGenerator ovito = new OvitoFileInputGenerator(OVITO_FILE_PATH);
 		
 		SimulationData simulationData = InformationParser
 				.generateCellIndexObject(dynamicFilePath, staticFilePath)
