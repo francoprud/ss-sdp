@@ -1,8 +1,5 @@
 package parser;
 
-import input_generator.PointGenerator;
-
-import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
@@ -51,69 +48,31 @@ public class OvitoFileInputGenerator {
 	}
 
 	private void printBoundaryParticle(int id, int x, int y) {
-		writer.println(id + " " + x + " " + y + " 0 0 " + BLUE + " 0");
+		writer.println(id + " " + x + " " + y + " 0 0 " + BLUE + " 0 " + BLUE);
 	}
 
 	private void printHeaders(int particlesAmount) {
 		writer.println(particlesAmount + 4);
-		writer.println("ID X Y dx dy R G B r");
+		writer.println("ID X Y dx dy pR pG pB r vR vG vB");
 	}
 
 	private String generateLine(Particle particle) {
 		StringBuilder line = new StringBuilder();
+		String particleColor = generateParticleColor(particle);
 		line.append(particle.getId()).append(" ").append(particle.getX())
 				.append(" ").append(particle.getY()).append(" ")
-				.append(Math.cos(particle.getAngle())*particle.getVelocity()).append(" ")
-				.append(Math.sin(particle.getAngle())*particle.getVelocity()).append(" ")
-				.append(generateParticleColor(particle)).append(" ")
-				.append(particle.getRadius());
+				.append(Math.cos(particle.getAngle()) * particle.getVelocity())
+				.append(" ")
+				.append(Math.sin(particle.getAngle()) * particle.getVelocity())
+				.append(" ").append(particleColor)
+				.append(" ").append(particle.getRadius()).append(" ")
+				.append(particleColor);
 		return line.toString();
 	}
 
 	private String generateParticleColor(Particle particle) {
-		float hue = calculateHue(particle.getAngle());
-		int colorValue = Color.HSBtoRGB(hue, 1.0f, 1.0f);
-		Color color = new Color(colorValue, true);
-		return color.getRed() + " " + color.getGreen() + " " + color.getBlue();
-	}
-
-	private float calculateHue(double angle) {
-		if (angle < 0) {
-			while (angle < 0) {
-				angle += 2 * Math.PI;
-			}
-		} else if (angle > 2 * Math.PI) {
-			while (angle > 2 * Math.PI) {
-				angle -= 2 * Math.PI;
-			}
-		}
-		return (float) (angle / (2 * Math.PI));
-	}
-
-	private static float calculateHuee(double angle) {
-		if (angle < 0) {
-			while (angle < 0) {
-				angle += 2 * Math.PI;
-			}
-		} else if (angle > 2 * Math.PI) {
-			while (angle > 2 * Math.PI) {
-				angle -= 2 * Math.PI;
-			}
-		}
-		return (float) (angle / (2 * Math.PI));
-	}
-
-	private static String generateParticleColorr(double angle) {
-		float hue = calculateHuee(angle);
-		int colorValue = Color.HSBtoRGB(hue, 1.0f, 1.0f);
-		Color color = new Color(colorValue, true);
-		return color.getRed() + " " + color.getGreen() + " " + color.getBlue();
-	}
-
-	public static void main(String[] args) {
-		for (int i = 0; i < 100; i++) {
-			double angle = PointGenerator.randomBetween(0, 10000);
-			System.out.println(generateParticleColorr(angle));
-		}
+		double red = (Math.sin(particle.getAngle()) / 2) + 0.5;
+		double green = (Math.cos(particle.getAngle()) / 2) + 0.5;
+		return red + " " + green + " 0.2";
 	}
 }

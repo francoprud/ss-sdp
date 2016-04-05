@@ -11,11 +11,11 @@ import parser.OvitoFileInputGenerator;
 public class Main {
 	private static final int M = 25;
 	private static final int T = 10000;
-	private static final String OVITO_FILE_PATH = "doc/examples/result.txt";
+	private static final String OVITO_FILE_PATH = "doc/examples/results/result.txt";
 
 	public static void main(String[] args) {
-		String dynamicFilePath = "doc/examples/Dynamic100.txt";
-		String staticFilePath = "doc/examples/Static100.txt";
+		String dynamicFilePath = "doc/examples/Dynamic500.txt";
+		String staticFilePath = "doc/examples/Static500.txt";
 		final OvitoFileInputGenerator ovito = new OvitoFileInputGenerator(OVITO_FILE_PATH);
 		
 		SimulationData simulationData = parseSimulationData(dynamicFilePath, staticFilePath);
