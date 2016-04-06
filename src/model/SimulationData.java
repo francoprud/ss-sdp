@@ -9,7 +9,7 @@ public class SimulationData {
 	private Integer spaceDimension; // All particle's coordinates are contained
 									// inside spaceDimension x spaceDimension
 	private Integer particlesAmount;
-	private Double noiseAmplitude;
+	private Double noiceAmplitude;
 	private List<Particle> particles;
 	private HashMap<Integer, Particle> particlesMap;
 
@@ -43,7 +43,11 @@ public class SimulationData {
 	}
 	
 	public Double getNoiceAmplitude() {
-		return noiseAmplitude;
+		return noiceAmplitude;
+	}
+	
+	public void setNoiceAmplitude(double noiceAmplitude) {
+		this.noiceAmplitude = noiceAmplitude;
 	}
 	
 	public void setParticles(List<Particle> particles) {
@@ -85,7 +89,7 @@ public class SimulationData {
 		}
 		
 		public Builder withNoiceAmplitude(double noiceAmplitude) {
-			cellIndexObject.noiseAmplitude = noiceAmplitude;
+			cellIndexObject.noiceAmplitude = noiceAmplitude;
 			return this;
 		}
 

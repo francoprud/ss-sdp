@@ -9,28 +9,31 @@ import parser.InformationParser;
 import parser.OvitoFileInputGenerator;
 
 public class Main {
-	private static final int M = 25;
-	private static final int T = 10000;
+	private static final int M = 1;
+	private static final int T = 1000;
 	private static final String OVITO_FILE_PATH = "doc/examples/results/result.txt";
 
-	public static void main(String[] args) {
-		String dynamicFilePath = "doc/examples/Dynamic500.txt";
-		String staticFilePath = "doc/examples/Static500.txt";
+	public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException {
+		System.out.println(Math.atan2(0.7, 0.5));
+		System.out.println(Math.atan(0.7 / 0.5));
+		String dynamicFilePath = "doc/examples/Dynamic300.txt";
+		String staticFilePath = "doc/examples/Static300.txt";
 		final OvitoFileInputGenerator ovito = new OvitoFileInputGenerator(OVITO_FILE_PATH);
 		
 		SimulationData simulationData = parseSimulationData(dynamicFilePath, staticFilePath);
 		if (simulationData == null || !isAValidMValue(simulationData) || !generateOvitoFiles(ovito, simulationData)) {
 			return;
 		}
-
-		new TP2Simulation(M, T, new TP2Simulation.Listener() {
+		long startTime = System.currentTimeMillis();
+		new TP2Simulation(getOptimalValidM(simulationData), T, new TP2Simulation.Listener() {
 			@Override
 			public void onSnapshotAvailable(int instance,
 					SimulationData simulationData) {
 				ovito.printSimulationInstance(simulationData);
 			}
 		}).simulate(simulationData);
-		
+		long endTime = System.currentTimeMillis();
+		System.out.println("Simulation time: " + (endTime - startTime));
 		ovito.endSimulation();
 	}
 
@@ -74,4 +77,9 @@ public class Main {
 		}
 	}
 	
+	private static int getOptimalValidM(SimulationData simulationData) {
+		int L = simulationData.getSpaceDimension();
+		double r = simulationData.getInteractionRadius();
+		return (int) Math.floor(L / (r + 2 * getMaximumRadius(simulationData) + 1)); 
+	}
 }
