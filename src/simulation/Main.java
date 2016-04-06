@@ -66,7 +66,7 @@ public class Main {
 	
 	private static boolean generateOvitoFiles(OvitoFileInputGenerator ovito, SimulationData simulationData) {
 		try {
-			ovito.generateFile(simulationData.getParticlesAmount());
+			ovito.generateFile();
 			return true;
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {
 			System.err.println("Can not generate ovito's files. Error: " + e.getMessage());

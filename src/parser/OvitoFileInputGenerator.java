@@ -21,7 +21,7 @@ public class OvitoFileInputGenerator {
 		this.filePath = filePath;
 	}
 
-	public void generateFile(int particlesAmount) throws FileNotFoundException,
+	public void generateFile() throws FileNotFoundException,
 			UnsupportedEncodingException {
 		writer = new PrintWriter(filePath, ENCODING);
 	}

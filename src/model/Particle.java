@@ -12,8 +12,6 @@ public class Particle {
 	private double angle;
 	private List<Particle> neighbors;
 	private boolean mark;
-	private double dx;
-	private double dy;
 
 	public Particle(int id, double x, double y, double radius, double velocity,
 			double angle) {
@@ -76,14 +74,6 @@ public class Particle {
 		return neighbors;
 	}
 
-	public double getDy() {
-		return dy;
-	}
-
-	public double getDx() {
-		return dx;
-	}
-
 	public void setX(double x) {
 		this.x = x;
 	}
@@ -94,14 +84,6 @@ public class Particle {
 
 	public void setAngle(double angle) {
 		this.angle = angle;
-	}
-
-	public void setDx(double dx) {
-		this.dx = dx;
-	}
-
-	public void setDy(double dy) {
-		this.dy = dy;
 	}
 
 	@Override
